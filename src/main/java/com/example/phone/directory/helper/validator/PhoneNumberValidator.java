@@ -11,7 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:countryRegex.properties")
 public class PhoneNumberValidator {
 
 	private Pattern pattern;

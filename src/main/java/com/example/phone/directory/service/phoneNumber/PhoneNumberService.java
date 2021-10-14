@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.phone.directory.helper.validator.PhoneNumberValidator;
+import com.example.phone.directory.mappers.phone.PhoneMapper;
+import com.example.phone.directory.model.country.Country;
 import com.example.phone.directory.model.customer.Customer;
 
 @Service
@@ -25,23 +27,17 @@ public class PhoneNumberService {
 	@Autowired
 	PhoneNumberValidator phoneNumberValidator;
 	
+	@Autowired
+	PhoneMapper phoneMapper;
+	
 	public List<PhoneNumberDTO> getAllPhoneNumbers()
 	{
 		List<Customer> customers = customerService.getAllCustomers();
 		List<PhoneNumberDTO> phoneNumbers = new ArrayList<PhoneNumberDTO>();
 		for(Customer customer: customers)
 		{
-			String countryName = countryService.getCountryName(customer.getPhoneNumber().getNumber());
-			String countryCode = countryService.getCountryCode(countryName);
-
-			PhoneNumberDTO phoneNumberDTO = new PhoneNumberDTO();
-			CountryDTO countryDTO = new CountryDTO();
-
-			countryDTO.setCountryCode(countryCode);
-			countryDTO.setCountryName(countryName);
-			phoneNumberDTO.setPhoneNumber(customer.getPhoneNumber().getNumber());
-			phoneNumberDTO.setCountry(countryDTO);
-			phoneNumberDTO.setState(countryName != null);
+			Country country = countryService.getCountryByPhoneNumber(customer.getPhoneNumber().getNumber());
+			PhoneNumberDTO phoneNumberDTO = phoneMapper.phoneNumberToPhoneNumberDTO(customer.getPhoneNumber(), country, country != null);
 			phoneNumbers.add(phoneNumberDTO);
 		}
 		return phoneNumbers;

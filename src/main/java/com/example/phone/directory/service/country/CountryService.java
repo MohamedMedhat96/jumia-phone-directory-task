@@ -6,49 +6,33 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.example.phone.directory.model.lookups.CountryCodes;
-import com.example.phone.directory.model.lookups.CountryRegex;
-import com.example.phone.directory.repository.CountryCodesRepository;
-import com.example.phone.directory.repository.CountryRegexRepository;
+import com.example.phone.directory.repository.country.CountryRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.phone.directory.helper.validator.PhoneNumberValidator;
+import com.example.phone.directory.model.country.Country;
 
 @Service
 public class CountryService {
 	
 
 	@Autowired
-	private CountryCodesRepository countryCodesRepository;
-
-	@Autowired
-	private CountryRegexRepository countryRegexRepository;
+	CountryRepository countryRepository;
 
 	@Autowired
 	PhoneNumberValidator numberValidator;
 	
-	public String getCountryName(String phoneNumber){
-		List<CountryRegex> countryRegexesList = countryRegexRepository.findAll();
-		Optional<String> countryName = countryRegexesList.stream().filter(e-> numberValidator.validate(e.getRegex(), phoneNumber))
-		  .map(CountryRegex::getName)
+	public Country getCountryByPhoneNumber(String phoneNumber){
+		List<Country> countryList = countryRepository.findAll();
+		Optional<Country> country = countryList.stream().filter(e-> numberValidator.validate(e.getRegex(), phoneNumber))
 		  .findFirst();	
-		if(countryName.isEmpty())
+		if(country.isEmpty())
 			return null;
 		else
-			return countryName.get();
-	}
-
-	public String getCountryCode(String countryName) {
-		List<CountryCodes> countryCodes = countryCodesRepository.findAll();
-		Optional<String> countryCode =  countryCodes.stream().filter(e -> e.getCountryName().equals(countryName))
-				.map(CountryCodes::getCode).findFirst();
-
-		if(countryCode.isEmpty())
-			return null;
-		else
-			return countryCode.get();
+			return country.get();
 	}
 
 
