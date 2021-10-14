@@ -6,3 +6,4 @@ insert or ignore into country(id, name , code, regex) values(3, 'Morocco', '+212
 insert or ignore into country(id, name , code, regex) values(4, 'Mozambique', '+258', '\(258\)\ ?[28]\d{7,8}$');
 insert or ignore  into country(id, name , code, regex) values(5, 'Uganda', '+256', '\(256\)\ ?\d{9}$');
 
+

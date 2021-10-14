@@ -19,7 +19,7 @@ public class Customer extends AbstractModel {
 	@Column(name = "name")
 	private String fullName;
 
-	
+
 	public PhoneNumber getPhoneNumber() {
 		return phoneNumber;
 	}

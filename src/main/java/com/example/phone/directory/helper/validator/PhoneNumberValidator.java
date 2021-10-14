@@ -17,8 +17,8 @@ public class PhoneNumberValidator {
 	
 	private Matcher matcher;
 	
-	public boolean validate(String countryName, String phoneNumber) {
-		pattern = Pattern.compile(countryName);
+	public boolean validate(String countryRegex, String phoneNumber) {
+		pattern = Pattern.compile(countryRegex);
 		matcher = pattern.matcher(phoneNumber);
 		if(matcher.find())
 			return true;
