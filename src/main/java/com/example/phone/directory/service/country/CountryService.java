@@ -34,6 +34,10 @@ public class CountryService {
 		else
 			return country.get();
 	}
+	
+	public Country getCountryByCountryName(String country) {
+		return countryRepository.findByName(country);
+	}
 
 
 }

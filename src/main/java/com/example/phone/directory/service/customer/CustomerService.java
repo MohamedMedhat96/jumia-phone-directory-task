@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.phone.directory.exceptions.IncorrectInputException;
+import com.example.phone.directory.model.country.Country;
 import com.example.phone.directory.model.customer.Customer;
 import com.example.phone.directory.model.search.SearchObject;
 
@@ -27,10 +29,27 @@ public class CustomerService {
 	public List<Customer> getAllCustomers() {
 		return customerRepo.findAll();
 	}
+	int[]x = {1,2,3,4};
 
 	public List<Customer> getCustomersPagedAndFiltered(Pageable pageable, SearchObject search) {
-		if(search.getSearchField().equals(SearchObject.SearchField.STATE))
-			return customerRepo.findbyState(Boolean.valueOf(search.getSearchValue()));
+		switch(search.searchField)
+		{
+		case STATE:
+			return customerRepo.findByPhoneNumberState(Boolean.valueOf(search.getSearchValue()), pageable);
+		case COUNTRY:
+		{
+			List<Customer> customers = customerRepo.findAll();
+			Country country = countryService.getCountryByCountryName(search.getSearchValue());
+			if(country != null) {
+				return customerRepo.findByCountryId(country.getId(), pageable);
+			}else {
+				throw new IncorrectInputException("The country you have " + search.getSearchValue() + " does not exist");
+			}
+		}
+		default:
+			throw new IncorrectInputException(search.getSearchField().name() + " does not exist");
+			
+		}
 	}
 
 	public List<Customer> getCustomerPaged(Pageable pageable) {

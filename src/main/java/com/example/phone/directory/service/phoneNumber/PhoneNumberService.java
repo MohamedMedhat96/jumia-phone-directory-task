@@ -50,7 +50,11 @@ public class PhoneNumberService {
 		if((page == null || size == null) && search ==  null)
 				return getAllPhoneNumbers(page, size);
 		else {
-			Pageable pageable = PageRequest.of(page, size);
+			Pageable pageable ;
+			if(page == null || size == null)
+				pageable = null;
+			else
+				pageable = PageRequest.of(page, size);
 			if (search != null) {
 				List<Customer> customers =  customerService.getCustomersPagedAndFiltered(pageable, search);
 				return getPhoneNumbersFromCustomers(customers);

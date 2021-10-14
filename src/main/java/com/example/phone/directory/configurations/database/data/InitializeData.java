@@ -8,6 +8,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
 
 import com.example.phone.directory.helper.validator.PhoneNumberValidator;
+import com.example.phone.directory.model.country.Country;
 import com.example.phone.directory.model.customer.Customer;
 import com.example.phone.directory.repository.country.CountryRepository;
 import com.example.phone.directory.repository.customer.CustomerRepository;
@@ -39,8 +40,10 @@ public class InitializeData {
         boolean shouldSave = true;
         List<Customer> customers = customerRepository.findAll();
         for(Customer customer : customers) {
-        	if(customer.getPhoneNumber().getState() ==null) {
-        		customer.getPhoneNumber().setState(countryService.getCountryByPhoneNumber(customer.getPhoneNumber().getNumber())!=null);
+        	if(customer.getPhoneNumber().getState() ==null || customer.getCountry() == null) {
+        		Country country = countryService.getCountryByPhoneNumber(customer.getPhoneNumber().getNumber());
+        		customer.getPhoneNumber().setState(country!=null);
+        		customer.setCountry(country);
         	}
         	else {
         		shouldSave = false;
