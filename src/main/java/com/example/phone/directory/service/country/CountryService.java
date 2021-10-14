@@ -36,7 +36,7 @@ public class CountryService {
 	}
 	
 	public Country getCountryByCountryName(String country) {
-		return countryRepository.findByName(country);
+		return countryRepository.findByNameIgnoreCase(country);
 	}
 
 

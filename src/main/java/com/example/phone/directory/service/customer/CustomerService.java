@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.phone.directory.exceptions.IncorrectInputException;
@@ -43,11 +44,11 @@ public class CustomerService {
 			if(country != null) {
 				return customerRepo.findByCountryId(country.getId(), pageable);
 			}else {
-				throw new IncorrectInputException("The country you have " + search.getSearchValue() + " does not exist");
+				throw new IncorrectInputException("The country you have entered does not exist", HttpStatus.NOT_FOUND);
 			}
 		}
 		default:
-			throw new IncorrectInputException(search.getSearchField().name() + " does not exist");
+			throw new IncorrectInputException(search.getSearchField().name() + " does not exist", HttpStatus.BAD_REQUEST);
 			
 		}
 	}
