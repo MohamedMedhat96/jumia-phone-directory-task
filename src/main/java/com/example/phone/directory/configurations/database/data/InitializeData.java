@@ -12,7 +12,7 @@ import com.example.phone.directory.model.country.Country;
 import com.example.phone.directory.model.customer.Customer;
 import com.example.phone.directory.repository.country.CountryRepository;
 import com.example.phone.directory.repository.customer.CustomerRepository;
-import com.example.phone.directory.service.country.CountryService;
+import com.example.phone.directory.service.country.CountryServiceImpl;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class InitializeData {
     CustomerRepository customerRepository;
     
     @Autowired
-    CountryService countryService;
+    CountryServiceImpl countryService;
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadData() {

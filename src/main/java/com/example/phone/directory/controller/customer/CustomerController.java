@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.phone.directory.model.customer.Customer;
-import com.example.phone.directory.service.customer.CustomerService;
+import com.example.phone.directory.service.customer.CustomerServiceImpl;
 
 @RestController
 @RequestMapping(value = "customer")
 public class CustomerController {
 
 	@Autowired
-	CustomerService customerService;
+	CustomerServiceImpl customerService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Customer> getAllCustomers(){

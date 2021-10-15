@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.phone.directory.dto.phone.PhoneNumberDTO;
 import com.example.phone.directory.model.search.SearchObject;
-import com.example.phone.directory.service.phoneNumber.PhoneNumberService;
+import com.example.phone.directory.service.phoneNumber.PhoneNumberServiceImpl;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class PhoneNumberController {
 
     @Autowired
-    PhoneNumberService phoneNumberService;
+    PhoneNumberServiceImpl phoneNumberService;
 
     @RequestMapping(method = RequestMethod.GET )
     public List<PhoneNumberDTO> getAllPhoneNumbers(@RequestParam(required = false) Integer page, 
