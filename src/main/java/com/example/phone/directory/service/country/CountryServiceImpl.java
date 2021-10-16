@@ -36,7 +36,7 @@ public class CountryServiceImpl implements CountryService{
 	}
 	
 	public Country getCountryByCountryName(String country) {
-		return countryRepository.findByNameIgnoreCase(country);
+		return countryRepository.findFirstByNameIgnoreCase(country);
 	}
 
 

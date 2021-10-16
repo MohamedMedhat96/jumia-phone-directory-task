@@ -7,6 +7,7 @@ import com.example.phone.directory.repository.customer.CustomerRepository;
 import com.example.phone.directory.service.country.CountryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<Customer> getAllCustomers() {
 		return customerRepo.findAll();
 	}
-	public List<Customer> getCustomersPagedAndFiltered(Pageable pageable, SearchObject search) {
+	public Page<Customer> getCustomersPagedAndFiltered(Pageable pageable, SearchObject search) {
 		switch(search.searchField)
 		{
 		case STATE:
@@ -51,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
 
-	public List<Customer> getCustomerPaged(Pageable pageable) {
-		return customerRepo.findAll(pageable).getContent();
+	public Page<Customer> getCustomerPaged(Pageable pageable) {
+		return customerRepo.findAll(pageable);
 	}
 }

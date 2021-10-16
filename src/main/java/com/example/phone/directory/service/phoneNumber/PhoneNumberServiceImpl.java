@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.phone.directory.dto.country.CountryDTO;
+import com.example.phone.directory.dto.page.PhoneNumberPageDTO;
 import com.example.phone.directory.dto.phone.PhoneNumberDTO;
 import com.example.phone.directory.service.country.CountryService;
 import com.example.phone.directory.service.customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,47 +35,49 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 	@Autowired
 	PhoneMapper phoneMapper;
 	
-	public List<PhoneNumberDTO> getAllPhoneNumbers(Integer page, Integer size)
+	public PhoneNumberPageDTO getAllPhoneNumbers(Integer page, Integer size)
 	{
-		List<Customer> customers;
+		Page<Customer> customers;
+		Pageable pageable = Pageable.unpaged();
 		if(page == null || size == null)
-			 customers = customerService.getAllCustomers();
+			 customers = customerService.getCustomerPaged(pageable);
 		else {
-			Pageable pageable = PageRequest.of(page, size);
+			pageable = PageRequest.of(page, size);
 			customers = customerService.getCustomerPaged(pageable);
 		}
 		return getPhoneNumbersFromCustomers(customers);
 	}
 	
 	
-	public List<PhoneNumberDTO> getPhoneNumbers(Integer page, Integer size, SearchObject search){
+	public PhoneNumberPageDTO getPhoneNumbers(Integer page, Integer size, SearchObject search){
 		if((page == null || size == null) && search ==  null)
 				return getAllPhoneNumbers(page, size);
 		else {
 			Pageable pageable ;
 			if(page == null || size == null)
-				pageable = null;
+				pageable = Pageable.unpaged();
 			else
 				pageable = PageRequest.of(page, size);
 			if (search != null) {
-				List<Customer> customers =  customerService.getCustomersPagedAndFiltered(pageable, search);
-				return getPhoneNumbersFromCustomers(customers);
+				Page<Customer> customersPage =  customerService.getCustomersPagedAndFiltered(pageable, search);
+				return getPhoneNumbersFromCustomers(customersPage);
 			} else {
-				List<Customer> customers = customerService.getCustomerPaged(pageable);
-				return getPhoneNumbersFromCustomers(customers);
+				Page<Customer> customersPage = customerService.getCustomerPaged(pageable);
+				return getPhoneNumbersFromCustomers(customersPage);
 			}
 		}
 	}
 	
-	private List<PhoneNumberDTO> getPhoneNumbersFromCustomers(List<Customer> customers){
+	private PhoneNumberPageDTO getPhoneNumbersFromCustomers(Page<Customer> customers){
 		List<PhoneNumberDTO> phoneNumbers = new ArrayList<PhoneNumberDTO>();
-		for(Customer customer: customers) 
+		for(Customer customer: customers.getContent()) 
 		{
 			Country country = customer.getCountry();
-			PhoneNumberDTO phoneNumberDTO = phoneMapper.phoneNumberToPhoneNumberDTO(customer.getPhoneNumber(), country, country != null);
+			PhoneNumberDTO phoneNumberDTO = phoneMapper.phoneNumberToPhoneNumberDTO(customer.getPhoneNumber(), country);
 			phoneNumbers.add(phoneNumberDTO);
 		}
-		return phoneNumbers;
+		
+		return phoneMapper.phoneNumberDtosToPhoneNumberPageDTO(customers.getTotalElements(), (long)customers.getTotalPages(), phoneNumbers);
 	}
 	
 }

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.phone.directory.dto.page.PhoneNumberPageDTO;
 import com.example.phone.directory.dto.phone.PhoneNumberDTO;
 import com.example.phone.directory.model.search.SearchObject;
 import com.example.phone.directory.service.phoneNumber.PhoneNumberServiceImpl;
 
+import java.awt.PageAttributes.MediaType;
 import java.util.List;
 
 @RestController
@@ -22,15 +24,15 @@ public class PhoneNumberController {
     PhoneNumberServiceImpl phoneNumberService;
 
     @RequestMapping(method = RequestMethod.GET )
-    public List<PhoneNumberDTO> getAllPhoneNumbers(@RequestParam(required = false) Integer page, 
+    public PhoneNumberPageDTO getAllPhoneNumbers(@RequestParam(required = false) Integer page, 
     		@RequestParam(required = false) Integer size){
         return phoneNumberService.getAllPhoneNumbers(page , size);
     }
    
-    @RequestMapping(method = RequestMethod.GET, path = "search" )
-    public List<PhoneNumberDTO> searchPhoneNumbers(@RequestParam(required = false) Integer page, 
+    @RequestMapping(method = RequestMethod.POST, path = "search", consumes="application/json")
+    public PhoneNumberPageDTO searchPhoneNumbers(@RequestParam(required = false) Integer page, 
     		@RequestParam(required = false) Integer size,
-    		@RequestBody SearchObject search){
+    		@RequestBody(required = false) SearchObject search){
         return phoneNumberService.getPhoneNumbers(page, size, search);
     }
     

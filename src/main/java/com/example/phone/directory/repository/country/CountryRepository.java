@@ -8,5 +8,5 @@ import com.example.phone.directory.model.country.Country;
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Long> {
 
-	public Country findByNameIgnoreCase(String name);
+	public Country findFirstByNameIgnoreCase(String name);
 }
