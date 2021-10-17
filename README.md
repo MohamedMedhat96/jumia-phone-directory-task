@@ -2,6 +2,10 @@
 
 To run the project please use the command
 
+mvn clean install package
+
+then run the next command
+
 docker-compose up --build
 
 
