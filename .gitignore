@@ -13,3 +13,6 @@ buildNumber.properties
 .settings/
 /target/**
 */target/* 
+/target/
+*.log
+*jumia-task-frontend/.history/src*
