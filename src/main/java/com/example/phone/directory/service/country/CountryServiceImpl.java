@@ -29,7 +29,7 @@ public class CountryServiceImpl implements CountryService{
 		List<Country> countryList = countryRepository.findAll();
 		Optional<Country> country = countryList.stream().filter(e-> numberValidator.validate(e.getRegex(), phoneNumber))
 		  .findFirst();	
-		if(country.isEmpty())
+		if(!country.isPresent())
 			return null;
 		else
 			return country.get();
