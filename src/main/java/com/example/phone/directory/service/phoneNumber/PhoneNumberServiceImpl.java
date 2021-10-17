@@ -50,21 +50,19 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 	
 	
 	public PhoneNumberPageDTO getPhoneNumbers(Integer page, Integer size, SearchObject search){
-		if((page == null || size == null) && search ==  null)
+		if(search ==  null)
 				return getAllPhoneNumbers(page, size);
 		else {
 			Pageable pageable ;
+			
 			if(page == null || size == null)
 				pageable = Pageable.unpaged();
 			else
 				pageable = PageRequest.of(page, size);
-			if (search != null) {
-				Page<Customer> customersPage =  customerService.getCustomersPagedAndFiltered(pageable, search);
-				return getPhoneNumbersFromCustomers(customersPage);
-			} else {
-				Page<Customer> customersPage = customerService.getCustomerPaged(pageable);
-				return getPhoneNumbersFromCustomers(customersPage);
-			}
+			
+			Page<Customer> customersPage =  customerService.getCustomersPagedAndFiltered(pageable, search);
+			return getPhoneNumbersFromCustomers(customersPage);
+			 
 		}
 	}
 	
